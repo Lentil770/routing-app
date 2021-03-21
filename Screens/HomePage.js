@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export default function LoginPage() {
+export default function EndPage() {
   return (<View>
-      <Text>LoginPage</Text>
+      <Text>Home Page</Text>
   </View>
   );
 }

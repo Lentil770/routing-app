@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export default function LoginPage() {
+export default function FeedbackPage() {
   return (<View>
-      <Text>LoginPage</Text>
+      <Text>Feedback Page</Text>
   </View>
   );
 }
