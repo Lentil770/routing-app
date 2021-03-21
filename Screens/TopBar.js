@@ -1,7 +1,10 @@
 import React from "react";
-import { View, Image } from "react-native";
+import { Text, View, Image } from "react-native";
+import { StatusBar } from 'expo-status-bar';
 
 import Context from '../user-context';
+
+import { TopBarText } from "../styles/text";
 
 
 export default function TopBar() {
@@ -10,8 +13,9 @@ export default function TopBar() {
         <Context.Consumer>
             { context => (
             <View >
+                <StatusBar style='auto' />
                 <Image style={{ height: 35, width: 120}} source={require('../assets/allin1ship-logo.png')} />  
-                <Text >Hello, {context.username}</Text>
+                <TopBarText >Hello, {context.username}</TopBarText>
             </View> )}
         </Context.Consumer>
     )

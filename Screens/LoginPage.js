@@ -1,6 +1,12 @@
 import React from 'react';
-import { View, StatusBar, Text, ActivityIndicator } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { View, Image, Alert, ActivityIndicator } from 'react-native';
+
 import Context from "../user-context";
+
+import { BtnText, PasswordText } from "../styles/text";
+import { LoginContainer } from "../styles/screens.js";
+import { MainButton, PasswordInput } from '../styles/buttons';
 
 class LoginPage extends React.Component {
   state = {
@@ -10,6 +16,9 @@ class LoginPage extends React.Component {
   static contextType = Context;
   
   componentDidMount() {
+    /*if (this.context.getUsername()) {
+        this.props.history.push('/home')
+    }*/
     fetch('https://allin1ship.herokuapp.com/getAccounts')
     .then(response => {
       if(!response.ok) {
@@ -20,19 +29,42 @@ class LoginPage extends React.Component {
     .catch(err => console.log('error in fetchplatforms', err))
   }
 
+  onButtonPress = () => {
+    const driverAccount = this.state.accounts && this.state.accounts.find(account =>  account.password === this.state.password)
+    if (driverAccount) {
+      
+      this.context.updateUsername(driverAccount.username)
+      this.props.history.push('/home')
+    } else{
+      Alert.alert('error', 'your password is incorrect. please try again')
+    }
+  }
+
   render() {
 
     if (this.state.loading) {
         return <View> 
-            <ActivityIndicator size="large" color="#00ff00" />
+            <ActivityIndicator size="large" color="#0000ff" />
         </View>
     }
 
     return (
-        <View>
+        <LoginContainer>
             <StatusBar style="auto" />
-            <Text>Login</Text>
-        </View>
+            <Image style={{ height: 85, width: 300, borderRadius: 26, bottom: 80}} source={require('../assets/allin1ship-logo.png')} />  
+            <PasswordText>Password:</PasswordText>
+            <PasswordInput
+            secureTextEntry={true}
+            placeholder='****'
+            keyboardType='numeric'
+            value={this.state.password}
+            onChangeText={(text) => this.setState({password: text})}
+            >
+            </PasswordInput>
+            <MainButton onPress={this.onButtonPress}>
+            <BtnText>SIGN ME IN</BtnText>
+            </MainButton>
+        </LoginContainer>
     );
   }
 }

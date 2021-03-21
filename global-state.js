@@ -11,7 +11,9 @@ state = {/*
   vehicle: 'defaultVehicle',
   dropoffInfo: 'defaultDroppoffInfo',
   stopTasks: [],
-  dataError: false*/
+  dataError: false,
+  loading: true
+  INCORPORATE FUNCTIONALITY TO SET LAODING FALSE ONCE DATA FETCHED.*/
 }
 
 /*seperate api call for tasks bc of way they are ordered...
@@ -46,42 +48,48 @@ updateUsername = async (username) => {
   this.setState({username: username});
   try {
     await AsyncStorage.setItem('username', username)
+    console.log(username, 'updateusername asyncstorage');
   } catch (e) {
     console.log('error saving username');
   }
 };
-
+/*
 getUsername = async () => {
     //check if username is already in AsyncStorage (in order to enable saved login etc.)
     try {
       const username = await AsyncStorage.getItem('username')
       if(username !== null) {
-        // value previously stored
-        console.log(username, 'gotusername successfully');
+        //console.log(username, 'gotusername successfully');
         this.setState({username})
-      } 
+        return true
+      } else {
+        return false
+      }
     } catch(e) {
       // error reading value
     }
 }
-
+*//*
 logout = () => {
     //not currently used, to implement a logout button on homepage
     AsyncStorage.removeItem('username')
-}
+    this.setState({username: null})
+}*/
 
 render(){
  return (
   <Context.Provider 
    value={{
-    /*data: this.state.data,
+    data: this.state.data,
     dataError: this.state.dataError,
     stopTasks: this.state.stopTasks,
     vehicle: this.state.vehicle,
     dropoffInfo: this.state.dropoffInfo,
-    username: this.state.getUsername(),*/
+    username: this.state.username,
+    getUsername: this.getUsername,
     updateUsername: this.updateUsername,
-    //fetchAppData: this.fetchAppData
+    logout: this.logout,
+    fetchAppData: this.fetchAppData
    }}
   >
    {this.props.children}
