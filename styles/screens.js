@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { StatusBar } from "react-native";
 
 const DarkBlue = '#0B3954';
 const LightBlue = '#2DB4B4';
@@ -50,4 +51,18 @@ export const PackageButtonsView = styled.View`
     margin-left: 5px;
     flex-wrap: wrap;
     justify-content: space-around;
+`
+
+export const TopBarView = styled.View`
+    align-self: stretch;
+    flex: 1;
+    flex-direction: row;
+    height: 90px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: white;
+    justify-content: space-between;
+    padding-horizontal: 10px;
+    padding-top: ${Platform.OS === 'android' ? StatusBar.currentHeight : 0};
 `

@@ -16,7 +16,7 @@ state = {
   INCORPORATE FUNCTIONALITY TO SET LAODING FALSE ONCE DATA FETCHED.*/
 }
 
-//seperate api call for tasks bc of way they are ordered...
+//seperate api call for tasks bc of way they are ordered in database/server (multiple tasks per stop)...
 fetchTasks = async (stop_ids) => {
   this.setState({stopTasks: []})
   for (let i=0;i<stop_ids.length;i++) {
@@ -31,6 +31,7 @@ fetchTasks = async (stop_ids) => {
    }
   }
 }
+//fetching drivers route data from server and setting it to state.
 fetchAppData = async () => {
   try {
     const response = await fetch(`https://allin1ship.herokuapp.com/getDailySchedule/${this.state.username}`)
