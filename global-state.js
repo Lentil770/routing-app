@@ -5,18 +5,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 using Context created in user-context file.
 inside this file it is fetching stop data once logged in and storing in state which is passed to all apps components.*/
 export default class GlobalState extends React.Component{
-state = {/*
+state = {
   data: [],
   username: '',
   vehicle: 'defaultVehicle',
   dropoffInfo: 'defaultDroppoffInfo',
   stopTasks: [],
   dataError: false,
-  loading: true
+  loading: true/*
   INCORPORATE FUNCTIONALITY TO SET LAODING FALSE ONCE DATA FETCHED.*/
 }
 
-/*seperate api call for tasks bc of way they are ordered...
+//seperate api call for tasks bc of way they are ordered...
 fetchTasks = async (stop_ids) => {
   this.setState({stopTasks: []})
   for (let i=0;i<stop_ids.length;i++) {
@@ -24,7 +24,8 @@ fetchTasks = async (stop_ids) => {
     try {
     const response = await fetch(`https://allin1ship.herokuapp.com/getDailyTasks/${stop_ids[i]}`)
     const data = await  response.json()
-    this.setState({stopTasks: [...this.state.stopTasks, data] })
+    console.log('fetched stop tasks');
+    this.setState({stopTasks: [...this.state.stopTasks, data], loading: false })
     } catch (e) {
         console.log('error in fetchtasks')
    }
@@ -37,12 +38,14 @@ fetchAppData = async () => {
     if (!data) throw new Error
     this.setState({data, dataError: false})
     await this.fetchTasks(data.map(obj => obj.schedule_stop_id))
+    console.log('fetchappdata end, now setting loading false', data);
+    this.setState({loading: false})
   } catch (e) {
       console.log('error occured in try fetch');
-      this.setState({dataError: true})
+      this.setState({dataError: true, loading: false})
   }
 }
-*/
+
 updateUsername = async (username) => {
     //on correct login from loginpage, it calls this func to (prev set name in global state/context) set username in asyncstorage to keep user logged in.?
   this.setState({username: username});
@@ -80,6 +83,7 @@ render(){
  return (
   <Context.Provider 
    value={{
+    loading: this.state.loading,
     data: this.state.data,
     dataError: this.state.dataError,
     stopTasks: this.state.stopTasks,

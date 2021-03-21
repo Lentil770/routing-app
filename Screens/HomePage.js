@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import Context from '../user-context';
@@ -13,13 +13,13 @@ import { MainButton } from '../styles/buttons';
 class WelcomePage extends React.Component {
 
     static contextType = Context;
-/*
-  componentDidMount() {
-    this.context.fetchAppData();
-    this.timer = setInterval(() => this.context.fetchAppData(), 60000);
-  }
 
-*/
+    componentDidMount() {
+        this.context.fetchAppData();
+        this.timer = setInterval(() => this.context.fetchAppData(), 60000);
+    }
+
+
     handleStartPress = () => {
         console.log('start buton pressed');
         fetch(`https://allin1ship.herokuapp.com/sendStartTime/${this.context.username}`)
