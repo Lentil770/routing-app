@@ -52,6 +52,7 @@ updateUsername = async (username) => {
 };
 
 getUsername = async () => {
+    //check if username is already in AsyncStorage (in order to enable saved login etc.)
     try {
       const username = await AsyncStorage.getItem('username')
       if(username !== null) {
@@ -62,8 +63,13 @@ getUsername = async () => {
     } catch(e) {
       // error reading value
     }
-  }
- 
+}
+
+logout = () => {
+    //not currently used, to implement a logout button on homepage
+    AsyncStorage.removeItem('username')
+}
+
 render(){
  return (
   <Context.Provider 
