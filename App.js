@@ -1,21 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { NativeRouter, Switch, Route } from "react-router-native";
+
+import GlobalState from "./global-state";
+
+import LoginPage from './Screens/LoginPage';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>routing-app version 2</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GlobalState>
+      <NativeRouter>
+        <Switch>
+          <Route exact path='/' component={LoginPage} />
+          {/*<Route exact path='/welcome' component={WelcomePage} />
+          {/*<Route exact path='/routelist' component={RouteListPage} />}
+          <Route exact path='/route' component={RoutePage} />
+          <Route exact path='/completed' component={CompletedPage} />*/}
+        </Switch>
+      </NativeRouter>
+    </GlobalState>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
