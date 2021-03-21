@@ -74,3 +74,14 @@ export const FeedbackInput = styled.TextInput`
     max-width: 350px;
     align-self: center;
 `
+
+export const BackButton = styled.TouchableHighlight`
+    background-color: ${Lavender};
+    height: 30px;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-left: 15px;
+    align-items: center;
+    align-self: flex-start;
+    border-radius: 26px;
+`

@@ -9,6 +9,7 @@ import TopBar from "./TopBar";
 import { BtnText, MainText, WelcomeText } from "../styles/text";
 import { PageContainer } from '../styles/screens';
 import { MainButton } from '../styles/buttons';
+import { CenteredView } from '../styles/misc';
 
 class WelcomePage extends React.Component {
 
@@ -29,9 +30,9 @@ class WelcomePage extends React.Component {
     render() {
 
         if (this.context.loading) {
-            return <View> 
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
+            return <CenteredView> 
+                <ActivityIndicator size="large" color="#ffffff" />
+            </CenteredView>
         }
 
         const contextData = this.context.data;

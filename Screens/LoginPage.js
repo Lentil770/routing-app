@@ -7,6 +7,7 @@ import Context from "../user-context";
 import { BtnText, PasswordText } from "../styles/text";
 import { LoginContainer } from "../styles/screens.js";
 import { MainButton, PasswordInput } from '../styles/buttons';
+import { CenteredView } from '../styles/misc';
 
 class LoginPage extends React.Component {
   state = {
@@ -43,9 +44,9 @@ class LoginPage extends React.Component {
   render() {
 
     if (this.state.loading) {
-        return <View> 
-            <ActivityIndicator size="large" color="#0000ff" />
-        </View>
+        return <CenteredView> 
+            <ActivityIndicator size="large" color="#ffffff" />
+        </CenteredView>
     }
 
     return (
