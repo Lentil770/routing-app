@@ -1,16 +1,18 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, Modal } from 'react-native';
 import { Link } from "react-router-native";
 
 import * as Linking from 'expo-linking';
 
 import TopBar from './TopBar';
+import FeedbackPage from './FeedbackPage';
 import Context from '../user-context';
 
 import { WazeImage, CompletedImage } from '../styles/images';
 import { MainButton, WazeButton, BackButton, ClosePageButton, ButtonGroup, CheckInButton } from '../styles/buttons';
 import { AddressInfoWrapper, RouteContainer } from '../styles/screens';
 import { MainText, BtnText, PageNumber, CustomerText, AddressText, DisplayText } from '../styles/text';
+import fetchFunc from '../Functions/fetchFuncs';
 
 const LightSeaGreen = '#8DD4CF';
 const Orange = '#F9972Cff';
@@ -26,7 +28,10 @@ class StopPage extends React.Component {
   static contextType = Context;
 
   handleCheckIn = () => {
-    console.log('handlecheckin clicked');
+    //send check in timestamp and open feedback page
+    console.log('handlecheckin'); 
+    this.setState({showFeedbackPage: true})
+    fetchFunc(`https://allin1ship.herokuapp.com/sendStartTime/${this.context.data.schedule_stop_id}`, 'send start time')
   }
 
   handleWazePress = () => {
@@ -57,14 +62,13 @@ class StopPage extends React.Component {
         <StatusBar style="auto" />
         <TopBar/>
 
-{/*this modal is the feedback page that pops up when check in to stop clicked. driver fills out form and tasks, an don completion should be sent to next page (props.nextPAge, and this.setstate pagecomplete.) 
+{/*this modal is the feedback page that pops up when check in to stop clicked. driver fills out form and tasks, an don completion should be sent to next page (props.nextPAge, and this.setstate pagecomplete.) */}
         <Modal
             animationType='slide'
-            visible={state.modalVisible}
-            //transparent={true}  //whats the diff? may be not waht i want.
-            onRequestClose={() => this.setState({modalVisible: false})}>
-            <FeedbackModal routeData={props.deliveryData} stopTasks={props.stopTasks} onPress={() => this.setState({modalVisible: false})} completeStop={() => this.handleCompletion()} />
-</Modal>*/}
+            visible={state.showFeedbackPage}
+            onRequestClose={() => this.setState({showFeedbackPage: false})}>
+            <FeedbackPage />
+        </Modal>
 
         {state.routeComplete && <CompletedImage 
           source = {require('../assets/tick.png')} 
