@@ -8,7 +8,7 @@ import TopBar from "./TopBar";
 
 import { BtnText, MainText, WelcomeText } from "../styles/text";
 import { PageContainer } from '../styles/screens';
-import { MainButton } from '../styles/buttons';
+import { StartButton } from '../styles/buttons';
 import { CenteredView } from '../styles/misc';
 
 class WelcomePage extends React.Component {
@@ -41,9 +41,9 @@ class WelcomePage extends React.Component {
             <StatusBar style="auto" />
             <TopBar />
             {!this.context.dataError ? <View>
-                {/*<MainButton onPress={() => this.context.logout()}>
+                {/*<LoginButton onPress={() => this.context.logout()}>
                     <BtnText>LOGOUT</BtnText>
-            </MainButton>*/}
+            </LoginButton>*/}
                 <WelcomeText> Welcome{"\n"}{this.context.username}</WelcomeText>
                 <MainText>
                 Welcome {this.context.username}, 
@@ -58,9 +58,9 @@ class WelcomePage extends React.Component {
             
                 <View style={{flexDirection: 'row', top: 200, }}>
 
-                    <MainButton onPress={() => this.handleStartPress()}>
+                    <StartButton onPress={() => this.handleStartPress()}>
                         <BtnText>START</BtnText>
-                    </MainButton>
+                    </StartButton>
                 </View>
             </View> : <MainText>Sorry {this.context.username} No route for you today</MainText>}
             </PageContainer>

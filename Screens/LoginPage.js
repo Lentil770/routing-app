@@ -6,7 +6,7 @@ import Context from "../user-context";
 
 import { BtnText, PasswordText } from "../styles/text";
 import { LoginContainer } from "../styles/screens.js";
-import { MainButton, PasswordInput } from '../styles/buttons';
+import { LoginButton, PasswordInput } from '../styles/buttons';
 import { CenteredView } from '../styles/misc';
 
 class LoginPage extends React.Component {
@@ -62,9 +62,9 @@ class LoginPage extends React.Component {
             onChangeText={(text) => this.setState({password: text})}
             >
             </PasswordInput>
-            <MainButton onPress={this.onButtonPress}>
+            <LoginButton onPress={this.onButtonPress}>
             <BtnText>SIGN ME IN</BtnText>
-            </MainButton>
+            </LoginButton>
         </LoginContainer>
     );
   }

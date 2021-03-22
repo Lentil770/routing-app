@@ -1,5 +1,5 @@
 
-export default function fetchFunc(url, type) {
+export function fetchFunc(url, type) {
     fetch(url)
     .then(response => {
       if (response.ok) {
@@ -10,3 +10,4 @@ export default function fetchFunc(url, type) {
     })
     .catch(err => console.log(`${type} error`, err))
 }
+

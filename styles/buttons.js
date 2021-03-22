@@ -3,7 +3,29 @@ import styled from "styled-components";
 const Lavender = '#7B506F';
 const LightSeaGreen = '#8DD4CF';
 
-export const MainButton = styled.TouchableHighlight`
+export const LoginButton = styled.TouchableHighlight`
+    background-color: ${Lavender};
+    height: 55px;
+    width: 90%;
+    margin-top: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 26px;
+`
+
+export const StartButton = styled.TouchableHighlight`
+    background-color: ${Lavender};
+    position: absolute;
+    bottom: 0px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 26px;
+    width: 90%;
+    margin-horizontal: 5%;
+`
+
+export const PhoneButton = styled.TouchableHighlight`
     background-color: ${Lavender};
     height: 50px;
     padding-right: 20px;
@@ -15,6 +37,18 @@ export const MainButton = styled.TouchableHighlight`
     justify-content: center;
     border-radius: 26px;
 `
+
+export const SubmitButton = styled.TouchableHighlight`
+    background-color: ${Lavender};
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 26px;
+    width: 90%;
+    margin-horizontal: 5%;
+    margin-bottom: 2%;
+`
+
 export const ClosePageButton = styled.TouchableHighlight`
     background-color: ${Lavender};
     height: 30px;
@@ -87,13 +121,13 @@ export const BackButton = styled.TouchableHighlight`
 `
 export const CheckInButton = styled.TouchableHighlight`
     background-color: ${Lavender};
+    position: absolute;
     height: 30px;
-    padding-right: 10px;
-    padding-left: 10px;
-    margin-left: 15px;
     align-items: center;
-    align-self: flex-start;
+    justify-content: center;
     border-radius: 26px;
+    width: 90%;
+    bottom: 25px;
 `
 
 export const WazeButton = styled.TouchableHighlight`

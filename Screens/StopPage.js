@@ -9,10 +9,10 @@ import FeedbackPage from './FeedbackPage';
 import Context from '../user-context';
 
 import { WazeImage, CompletedImage } from '../styles/images';
-import { MainButton, WazeButton, BackButton, ClosePageButton, ButtonGroup, CheckInButton } from '../styles/buttons';
+import { PhoneButton, WazeButton, BackButton, ClosePageButton, ButtonGroup, CheckInButton } from '../styles/buttons';
 import { AddressInfoWrapper, RouteContainer } from '../styles/screens';
 import { MainText, BtnText, PageNumber, CustomerText, AddressText, DisplayText } from '../styles/text';
-import fetchFunc from '../Functions/fetchFuncs';
+import { fetchFunc } from '../Functions/fetchFuncs';
 
 const LightSeaGreen = '#8DD4CF';
 const Orange = '#F9972Cff';
@@ -30,8 +30,14 @@ class StopPage extends React.Component {
   handleCheckIn = () => {
     //send check in timestamp and open feedback page
     console.log('handlecheckin'); 
-    this.setState({showFeedbackPage: true})
-    fetchFunc(`https://allin1ship.herokuapp.com/sendStartTime/${this.context.data.schedule_stop_id}`, 'send start time')
+    this.setState({showFeedbackPage: true});
+    fetchFunc(`https://allin1ship.herokuapp.com/sendStartTime/${this.context.data[this.props.pageNumber-1].schedule_stop_id}`, 'send start time')
+  }
+  
+  handleCompletion = () => {
+    this.props.nextPage();
+    !this.state.routeComplete && fetchFunc(`https://allin1ship.herokuapp.com/sendTimestamp/${this.context.data[this.props.pageNumber-1].schedule_stop_id}`, 'complete stop timestamp');
+    this.setState({routeComplete: !this.state.routeComplete});
   }
 
   handleWazePress = () => {
@@ -67,7 +73,13 @@ class StopPage extends React.Component {
             animationType='slide'
             visible={state.showFeedbackPage}
             onRequestClose={() => this.setState({showFeedbackPage: false})}>
-            <FeedbackPage />
+            <FeedbackPage 
+              pageNumber={this.props.pageNumber} 
+              stopData={stopData}
+              stopTasks={stopTasks}
+              closeModal={() => this.setState({showFeedbackPage: false})}
+              completeStop={this.handleCompletion}
+            />
         </Modal>
 
         {state.routeComplete && <CompletedImage 
@@ -93,9 +105,9 @@ class StopPage extends React.Component {
           <WazeImage source={require('../assets/waze-logo.webp')}/>
         </WazeButton>
 
-        <MainButton onPress={this.dialCall} >
+        <PhoneButton onPress={this.dialCall} >
             <BtnText>Call {stopData['contact_name']} ({stopData['contact_number']})</BtnText>
-        </MainButton>   
+        </PhoneButton>   
              
         <CheckInButton
           style={{backgroundColor: (state.routeComplete ? Lavender : DarkBlue), height: 60}}  
