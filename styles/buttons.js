@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const Lavender = '#7B506F';
 const LightSeaGreen = '#8DD4CF';
+const DarkBlue = '#0B3954';
 
 export const LoginButton = styled.TouchableHighlight`
     background-color: ${Lavender};
@@ -50,7 +51,7 @@ export const SubmitButton = styled.TouchableHighlight`
 `
 
 export const ClosePageButton = styled.TouchableHighlight`
-    background-color: ${Lavender};
+    background-color: ${DarkBlue};
     height: 30px;
     padding-right: 10px;
     padding-left: 10px;

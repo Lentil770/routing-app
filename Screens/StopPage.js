@@ -20,8 +20,9 @@ const DarkBlue = '#0B3954';
 const Lavender = '#7B506F';
 
 class StopPage extends React.Component {
+  //routecomplete with pagenumber bc w/o, glitch was setting ALL stops complete
   state={
-    routeComplete: false,
+    [`routeComplete${this.props.pageNumber}`]: false,
     showFeedbackPage: false
   }
   
@@ -36,8 +37,8 @@ class StopPage extends React.Component {
   
   handleCompletion = () => {
     this.props.nextPage();
-    !this.state.routeComplete && fetchFunc(`https://allin1ship.herokuapp.com/sendTimestamp/${this.context.data[this.props.pageNumber-1].schedule_stop_id}`, 'complete stop timestamp');
-    this.setState({routeComplete: !this.state.routeComplete});
+    !this.state[`routeComplete${this.props.pageNumber}`] && fetchFunc(`https://allin1ship.herokuapp.com/sendTimestamp/${this.context.data[this.props.pageNumber-1].schedule_stop_id}`, 'complete stop timestamp');
+    this.setState({[`routeComplete${this.props.pageNumber}`]: !this.state[`routeComplete${this.props.pageNumber}`]});
   }
 
   handleWazePress = () => {
@@ -64,7 +65,7 @@ class StopPage extends React.Component {
     )
    
     return (
-      <RouteContainer style={{backgroundColor: (state.routeComplete ? LightSeaGreen : Orange)}}>
+      <RouteContainer style={{backgroundColor: (state[`routeComplete${this.props.pageNumber}`] ? LightSeaGreen : Orange)}}>
         <StatusBar style="auto" />
         <TopBar/>
 
@@ -82,7 +83,7 @@ class StopPage extends React.Component {
             />
         </Modal>
 
-        {state.routeComplete && <CompletedImage 
+        {state[`routeComplete${this.props.pageNumber}`] && <CompletedImage 
           source = {require('../assets/tick.png')} 
           style={{borderRadius: 36}}
         />}
@@ -92,7 +93,7 @@ class StopPage extends React.Component {
         <BackButton onPress={props.nextPage}><BtnText>next</BtnText></BackButton> 
         <PageNumber>{props.pageNumber}/{data.length} </PageNumber>        
 
-        <AddressInfoWrapper style={{backgroundColor: (state.routeComplete ? '#addeda' : '#F68813')}}>
+        <AddressInfoWrapper style={{backgroundColor: (state[`routeComplete${this.props.pageNumber}`] ? '#addeda' : '#F68813')}}>
           <CustomerText>{stopData['customer_name']}</CustomerText>
           <AddressText>{stopData.address}</AddressText>
           <MainText>{stopData.location}</MainText>
@@ -110,7 +111,7 @@ class StopPage extends React.Component {
         </PhoneButton>   
              
         <CheckInButton
-          style={{backgroundColor: (state.routeComplete ? Lavender : DarkBlue), height: 60}}  
+          style={{backgroundColor: (state[`routeComplete${this.props.pageNumber}`] ? Lavender : DarkBlue), height: 60}}  
           onPress={this.handleCheckIn}>
             <BtnText style={{fontWeight: 'bold'}}>CHECK IN</BtnText>
         </CheckInButton>

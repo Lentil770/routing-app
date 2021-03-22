@@ -1,5 +1,6 @@
 import React from "react";
 import { View } from "react-native";
+import { fetchFunc, postFeedback } from "../Functions/fetchFuncs";
 import { SubmitButton, FeedbackInput, PackageButton, ClosePageButton, TaskButton } from "../styles/buttons";
 import { FeedbackContainer, TaskCompletionContainer, PackageButtonsView } from "../styles/screens";
 import { BtnText, MainText, LineText } from "../styles/text";
@@ -25,6 +26,7 @@ export default class FeedbackPage extends React.Component {
     static contextType = Context;
 
     componentDidMount() {
+      //fetches feedback options from state to enable changes in options
         fetch('https://allin1ship.herokuapp.com/getFeedbackOptions')
         .then(response => response.json())
         .then(json => this.setState({feedbackOptions: json}))
@@ -34,6 +36,7 @@ export default class FeedbackPage extends React.Component {
 
     
     setFeedbackState = () => {
+      //self evident what this does, used on submiting feedback to know if feedback exists to add to sent data
         const { feedbackOptions } = this.state;
         for (let i=0;i<feedbackOptions.length;i++) {
             this.setState({[`feedback${i}`]: false})
@@ -41,42 +44,20 @@ export default class FeedbackPage extends React.Component {
     }
 
     setTasksState = () => {
+      //sets state for eash task true/false to send completion status of each 
         const { stopTasks } = this.props;
         for (let i=0;i<stopTasks.length;i++) {
             this.setState({[`task${stopTasks[i].task_id}`]: false})
         }
     }
 
+    //never used?
     onFeedbackChange = (newFeedback) => {
         this.setState({feedback: newFeedback})
     }
 
-    
-    packageNumberSubmit = () => {
-        fetch(`https://allin1ship.herokuapp.com/sendPackageNumber/${this.props.stopData.schedule_stop_id}/${this.state.numberPackages}`)
-           .then(response => {
-             if (response.ok) {
-               console.log('package number submited ok!');
-             } else {
-             throw new Error
-             }
-           })
-           .catch(err => console.log('error in sending packageNumber', err))
-    }
-
-    postCompletionStatus = () => {
-                fetch(`https://allin1ship.herokuapp.com/markCompletionStatus/${this.props.stopData.schedule_stop_id}`)
-           .then(response => {
-             if (response.ok) {
-               console.log('post completions status response ok!');
-             } else {
-             throw new Error
-             }
-           })
-           .catch(err => console.log('error in sending packageNumber', err))
-    }
-
     onfeedbackSubmit = () => {
+
         let feedbackToSend = [this.state.feedback]
         for (let i=0;i<this.state.feedbackOptions.length;i++) {
             if (this.state[`feedback${i}`]) {
@@ -84,61 +65,26 @@ export default class FeedbackPage extends React.Component {
             }
         }
         feedbackToSend = feedbackToSend.join()
-        fetch(`https://allin1ship.herokuapp.com/sendFeedback/${this.props.stopData.schedule_stop_id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({feedback: feedbackToSend})
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('feedback successfully submitted');
-            } else {
-                throw new Error;
-            }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+        postFeedback(`https://allin1ship.herokuapp.com/sendFeedback/${this.props.stopData.schedule_stop_id}`, feedbackToSend)
     }
 
     tasksSubmit = () => {
         const { stopTasks } = this.props;
         for (let i=0;i<stopTasks.length;i++) {
             if (this.state[`task${stopTasks[i].task_id}`]) {
-            fetch(`https://allin1ship.herokuapp.com/markTaskComplete/${stopTasks[i].task_id}`)
-           .then(response => {
-             if (response.ok) {
-               console.log('tasksubmit response ok!');
-             } else {
-             throw new Error
-             }
-           })
-           .catch(err => console.log('error in sending task', err))
+            fetchFunc(`https://allin1ship.herokuapp.com/markTaskComplete/${stopTasks[i].task_id}`, 'mark task complete')
         } else {
-            fetch(`https://allin1ship.herokuapp.com/markTaskIncomplete/${stopTasks[i].task_id}`)
-           .then(response => {
-             if (response.ok) {
-               console.log('mark incomplete response ok!');
-             } else {
-             throw new Error
-             }
-           })
-        }
-        }
-    }
- 
+            fetchFunc(`https://allin1ship.herokuapp.com/markTaskIncomplete/${stopTasks[i].task_id}`, 'mark tast incomplete')
+    }}}
     
     handleSubmit = () => {
         this.tasksSubmit()
         this.onfeedbackSubmit()
-        this.packageNumberSubmit()
+        fetchFunc(`https://allin1ship.herokuapp.com/sendPackageNumber/${this.props.stopData.schedule_stop_id}/${this.state.numberPackages}`, 'submit package number')
         this.props.completeStop()
-        this.postCompletionStatus()
+        fetchFunc(`https://allin1ship.herokuapp.com/markCompletionStatus/${this.props.stopData.schedule_stop_id}`, 'post completion status')
         this.props.closeModal()
     }
-
 
     _handleClick(flag, button, numberPackages) {
       if (flag == 1) {
@@ -147,12 +93,14 @@ export default class FeedbackPage extends React.Component {
       this.setState({SelectedButton: button, numberPackages, feedbackPackagesSelected: this.state.feedbackSelected && true})
     }
 
-    handleCheck = (stateReference) => {
+    handleTaskCheck = (stateReference) => {
+      //handles task state completion
       this.setState(prevState => ({
           [stateReference]: !prevState[stateReference]
     }))}
 
     handleFeedback = (feedback, index) => {
+      //handles selection of a generated feedback option btn
         this.setState({feedbackSelected: true})
         this.setState(prevState => ({
             [`feedback${index}`]: !prevState[`feedback${index}`]
@@ -161,6 +109,7 @@ export default class FeedbackPage extends React.Component {
     }
 
     handleFeedbackInput = (feedback) => {
+      //handles feedback change from the original user input feedback
         this.setState({feedbackSelected: true})
         this.setState({feedback})
     }
@@ -169,7 +118,7 @@ export default class FeedbackPage extends React.Component {
     render() {
     
       const { stopData, stopTasks } = this.props;
-    const feedbackOptionsDisplay = this.state.feedbackOptions && this.state.feedbackOptions.map((feedback, index) => 
+      const feedbackOptionsDisplay = this.state.feedbackOptions && this.state.feedbackOptions.map((feedback, index) => 
         <TaskButton
           key={index}
           style={{backgroundColor: (this.state[`feedback${index}`]? Orange : Lavender)}}
@@ -179,22 +128,31 @@ export default class FeedbackPage extends React.Component {
               {feedback}
           </BtnText>
         </TaskButton>
-    )
+      )
 
-    const tasksDisplay2 = stopTasks && stopTasks.map((task) => <TaskButton
-            onPress={() => this.handleCheck(`task${task.task_id}`)}
-            style={{backgroundColor: (this.state[`task${task.task_id}`]? Orange : Lavender)}}
-            underlayColor={Orange}>
-                <BtnText>{task.task}</BtnText>
-            </TaskButton>
-    )
+      const tasksDisplay = stopTasks && stopTasks.map((task) => <TaskButton
+        onPress={() => this.handleTaskCheck(`task${task.task_id}`)}
+        style={{backgroundColor: (this.state[`task${task.task_id}`]? Orange : Lavender)}}
+        underlayColor={Orange}>
+            <BtnText>{task.task}</BtnText>
+        </TaskButton>
+      )
+
+      const renderPackageButtons = ['0', '1-5', '6-10', '11-15', '16-20', '21+'].map((range, index) => 
+        <PackageButton
+          style={{backgroundColor: (this.state.SelectedButton === index+1 ? Orange : Lavender)}}
+          onPress={() => this._handleClick('any flag', index+1, range)}
+          underlayColor={Orange}>
+              <BtnText>{range}</BtnText>
+        </PackageButton>
+      )
     
     return (        
         
           <FeedbackContainer>
               
             <ClosePageButton
-              onPress={() => { this.props.onPress() }}>
+              onPress={this.props.closeModal}>
                 <BtnText>X</BtnText>
             </ClosePageButton> 
             
@@ -203,7 +161,7 @@ export default class FeedbackPage extends React.Component {
             <TaskCompletionContainer>
               <LineText>TASKS</LineText>
               <MainText>MARK TASKS COMPLETE</MainText>
-              {stopTasks && tasksDisplay2}
+              {stopTasks && tasksDisplay}
             </TaskCompletionContainer>
 
             <View>
@@ -221,58 +179,8 @@ export default class FeedbackPage extends React.Component {
             </View>
             
               <PackageButtonsView style={{flexDirection: 'row'}}>   
-                <LineText>NUMBER OF PACKAGES</LineText>              
-                <PackageButton
-                  style={{backgroundColor: (this.state.SelectedButton === '1' ? Orange : Lavender)}}
-                  onPress={() => this._handleClick('any flag', '1', '0')}
-                  underlayColor={Orange}>
-                      <BtnText>0</BtnText>
-                </PackageButton>
-
-                <PackageButton
-                  style={{backgroundColor: (this.state.SelectedButton === '2' ? Orange : Lavender)}}
-                  onPress={() => this._handleClick('any flag', '2', '1-5')}
-                  underlayColor={Orange}>
-                  <BtnText>
-                      1-5
-                  </BtnText>
-                </PackageButton>
-
-                <PackageButton
-                  style={{backgroundColor: (this.state.SelectedButton === '3' ? Orange : Lavender)}}
-                  onPress={() => this._handleClick('any flag', '3', '6-10')}
-                  underlayColor={Orange}>
-                  <BtnText>
-                      6-10
-                  </BtnText>
-                </PackageButton>
-
-                <PackageButton
-                  style={{backgroundColor: (this.state.SelectedButton === '4' ? Orange : Lavender)}}
-                  onPress={() => this._handleClick('any flag', '4', '11-15')}
-                  underlayColor={Orange}>
-                  <BtnText>
-                      11-15
-                  </BtnText>
-                </PackageButton>
-
-                <PackageButton
-                  style={{backgroundColor: (this.state.SelectedButton === '5' ? Orange : Lavender)}}
-                  onPress={() => this._handleClick('any flag', '5', '16-20')}
-                  underlayColor={Orange}>
-                  <BtnText>
-                      16-20
-                  </BtnText>
-                </PackageButton>
-
-                <PackageButton
-                  style={{backgroundColor: (this.state.SelectedButton === '6' ? Orange : Lavender)}}
-                  onPress={() => this._handleClick('any flag', '6', '21-25')}
-                  underlayColor={Orange}>
-                  <BtnText>
-                      20+
-                  </BtnText>
-                </PackageButton>
+                <LineText>NUMBER OF PACKAGES</LineText>   
+                {renderPackageButtons}           
             </PackageButtonsView>
 
 
