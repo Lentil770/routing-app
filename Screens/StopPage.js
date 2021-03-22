@@ -41,11 +41,17 @@ class StopPage extends React.Component {
 
   render() {
     const { props, state, context } = this;
-    const { data, stopTasks } = context;
+    const { data } = context;
+
     console.log(context);
     const stopData = data[props.pageNumber-1]
+    const stopTasks = context.stopTasks[props.pageNumber-1]
     console.log('stopdata', stopData);
 
+    const tasksDisplay = stopTasks && stopTasks.map((task, index) => 
+      <MainText key={index}>- {task.task}</MainText>
+    )
+   
     return (
       <RouteContainer style={{backgroundColor: (state.routeComplete ? LightSeaGreen : Orange)}}>
         <StatusBar style="auto" />
@@ -75,8 +81,8 @@ class StopPage extends React.Component {
           <AddressText>{stopData.address}</AddressText>
           <MainText>{stopData.location}</MainText>
           <MainText>{/*comments on the customer*/stopData.comments}</MainText>
-          {(stopTasks[props.pageNumber-1] && stopTasks[props.pageNumber-1].length>=1) && <MainText>Tasks:</MainText>}
-          {/*tasksDisplay*/}
+          {(stopTasks && stopTasks.length>=1) && <MainText>Tasks:</MainText>}
+          {tasksDisplay}
         </AddressInfoWrapper>
 
         <WazeButton onPress={this.handleWazePress} >
