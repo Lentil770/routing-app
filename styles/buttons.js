@@ -85,3 +85,24 @@ export const BackButton = styled.TouchableHighlight`
     align-self: flex-start;
     border-radius: 26px;
 `
+export const CheckInButton = styled.TouchableHighlight`
+    background-color: ${Lavender};
+    height: 30px;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-left: 15px;
+    align-items: center;
+    align-self: flex-start;
+    border-radius: 26px;
+`
+
+export const WazeButton = styled.TouchableHighlight`
+    width: 75px;
+    height: 75px;
+    padding: 0;
+    border-radius: 26px;
+`
+export const ButtonGroup = styled.View`
+    display: flex;
+    flex-direction: row;
+`
