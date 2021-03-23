@@ -11,8 +11,9 @@ import { PageContainer } from '../styles/screens';
 import { StartButton } from '../styles/buttons';
 import { CenteredView } from '../styles/misc';
 
-class WelcomePage extends React.Component {
-
+class HomePage extends React.Component {
+//component renders welcome info to driver and says which vehicle using.
+//in future app updates potential for more functionality etc.
     static contextType = Context;
 
     componentDidMount() {
@@ -67,4 +68,4 @@ class WelcomePage extends React.Component {
     }
 }
 
-export default WelcomePage;
+export default HomePage;

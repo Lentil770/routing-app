@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Image, Alert, ActivityIndicator } from 'react-native';
+import { Image, Alert, ActivityIndicator } from 'react-native';
 
 import Context from "../user-context";
 
@@ -17,7 +17,8 @@ class LoginPage extends React.Component {
   static contextType = Context;
   
   componentDidMount() {
-    /*if (this.context.getUsername()) {
+    /*want to add functionality to keep user logged in maybe.
+    if (this.context.getUsername()) {
         this.props.history.push('/home')
     }*/
     fetch('https://allin1ship.herokuapp.com/getAccounts')
@@ -26,7 +27,7 @@ class LoginPage extends React.Component {
           throw new Error()
       }
       return response.json()
-    }).then(json => this.setState({accounts: json, loading: false}, console.log('response, ', json)))
+    }).then(json => this.setState({accounts: json, loading: false}))
     .catch(err => console.log('error in fetchplatforms', err))
   }
 
@@ -44,6 +45,7 @@ class LoginPage extends React.Component {
   render() {
 
     if (this.state.loading) {
+      //renders loading symbol until accoutns are loaded to avoid error messages on correct passwords
         return <CenteredView> 
             <ActivityIndicator size="large" color="#ffffff" />
         </CenteredView>

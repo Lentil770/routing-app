@@ -3,7 +3,6 @@ import { ToastAndroid } from 'react-native';
 
 import StopPage from './StopPage';
 import EndPage from "./EndPage";
-import HomePage from "./HomePage";
 import Context from '../user-context';
 
 class RouteContainer extends React.Component {

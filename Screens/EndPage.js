@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { BackButton, Link } from "react-router-native";
+import { Link } from "react-router-native";
 import { StatusBar } from 'expo-status-bar';
 
 import Context from "../user-context";
@@ -7,11 +7,12 @@ import TopBar from "./TopBar";
 
 import { MainText, BtnText, DoneText } from '../styles/text';
 import { PageContainer } from '../styles/screens';
-import { MainButton } from "../styles/buttons";
+import { LoginButton, BackButton } from "../styles/buttons";
 
 
 export default function EndPage(props) {
-
+//final page component for after last stop, displays parting message, where to leave van eg etc.
+//needs back page btn and styled homebtn
   const appContext = useContext(Context);
 
   const dropoffText =  `Thank you for the hard work today, it is greatly appreciated.
@@ -28,11 +29,11 @@ export default function EndPage(props) {
     <PageContainer>
       <StatusBar style="auto" />
       <TopBar />
-      <BackButton />
+      <BackButton onPress={props.prevPage}><BtnText>back</BtnText></BackButton>
       <DoneText>  ALL{"\n"}DONE!</DoneText>
       <MainText>{appContext.data.length>0 ? appContext.data[0].dropoff_info : dropoffText}</MainText>
       
-      <Link to="/home"  component={MainButton}><BtnText>WELCOME PAGE</BtnText></Link> 
+      <Link to="/home"  component={LoginButton}><BtnText>HOME</BtnText></Link> 
     </PageContainer>
   );
 }

@@ -26,8 +26,6 @@ class StopPage extends React.Component {
     [`routeComplete${this.props.pageNumber}`]: false,
     showFeedbackPage: false
   }
-
-  
   static contextType = Context;
 
   handleCheckIn = () => {
@@ -37,12 +35,14 @@ class StopPage extends React.Component {
   }
   
   handleCompletion = () => {
+    //this is passed as prop to Modal and when complete stop is clicked, this func is called and sets this page as complete etc.
     this.props.nextPage();
     !this.state[`routeComplete${this.props.pageNumber}`] && fetchFunc(`https://allin1ship.herokuapp.com/sendTimestamp/${this.context.data[this.props.pageNumber-1].schedule_stop_id}`, 'complete stop timestamp');
     this.setState({[`routeComplete${this.props.pageNumber}`]: !this.state[`routeComplete${this.props.pageNumber}`]});
   }
 
   handleWazePress = () => {
+    //for waze btn, opens waze with stop address searched
     const wazeAddress = encodeURIComponent(this.context.data[this.props.pageNumber-1].address)
     Linking.openURL('https://waze.com/ul?q=' + wazeAddress) 
   };
@@ -86,6 +86,7 @@ class StopPage extends React.Component {
           source = {require('../assets/tick.png')} 
           style={{borderRadius: 36}}
         />}
+        
         <NavButtons>
           <BackButton onPress={props.prevPage}><BtnText>back</BtnText></BackButton>
           <Link /*style add*/ to="/home"  component={HomeButton}><WazeImage source={require('../assets/home-page.jpg')} /></Link> 

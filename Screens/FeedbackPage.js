@@ -14,6 +14,7 @@ const Orange = '#F9972Cff';
 //here user needs to select feedback or write own, select how manuy packages
 //and select completed tasks.
 //complete stop button only shows once feedback and #packages selected.
+//longest file bc has most functionality - collects task completion, feedback, custom feedback and package numbers and handles submission of all.
 export default class FeedbackPage extends React.Component {
     state = {
         feedback: '',
@@ -22,7 +23,6 @@ export default class FeedbackPage extends React.Component {
         checked1: true,
         feedbackOptions: []
     }
-
     static contextType = Context;
 
     componentDidMount() {
@@ -34,7 +34,6 @@ export default class FeedbackPage extends React.Component {
         this.setTasksState();
     }
 
-    
     setFeedbackState = () => {
       //self evident what this does, used on submiting feedback to know if feedback exists to add to sent data
         const { feedbackOptions } = this.state;
@@ -51,13 +50,7 @@ export default class FeedbackPage extends React.Component {
         }
     }
 
-    //never used?
-    onFeedbackChange = (newFeedback) => {
-        this.setState({feedback: newFeedback})
-    }
-
     onfeedbackSubmit = () => {
-
         let feedbackToSend = [this.state.feedback]
         for (let i=0;i<this.state.feedbackOptions.length;i++) {
             if (this.state[`feedback${i}`]) {
@@ -148,7 +141,6 @@ export default class FeedbackPage extends React.Component {
       )
     
     return (        
-        
           <FeedbackContainer>
               
             <ClosePageButton
@@ -175,15 +167,12 @@ export default class FeedbackPage extends React.Component {
                     onChangeText={(text => this.handleFeedbackInput(text))}
                 >
                 </FeedbackInput>
-
             </View>
             
               <PackageButtonsView style={{flexDirection: 'row'}}>   
                 <LineText>NUMBER OF PACKAGES</LineText>   
                 {renderPackageButtons}           
             </PackageButtonsView>
-
-
             
             {this.state.feedbackPackagesSelected && <SubmitButton
                 style={{backgroundColor: DarkBlue, position: 'absolute', bottom: 1}}  

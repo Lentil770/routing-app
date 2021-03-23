@@ -24,8 +24,7 @@
         "foregroundImage": "./assets/playstore-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.lentil770.routingapp",
-      "versionCode": 1
+      "package": "com.lentil770.routingapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

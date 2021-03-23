@@ -8,7 +8,7 @@ import { TopBarText } from "../styles/text";
 import { TopBarView } from "../styles/screens"
 
 export default function TopBar() {
-
+//rendering the bar on top of each page - with logo and hello username
     return(
         <Context.Consumer>
             { context => (
