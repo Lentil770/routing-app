@@ -22,7 +22,6 @@ class WelcomePage extends React.Component {
 
 
     handleStartPress = () => {
-        console.log('start buton pressed');
         fetch(`https://allin1ship.herokuapp.com/sendStartTime/${this.context.username}`)
         this.context.data && this.props.history.push('/route-container')
     }

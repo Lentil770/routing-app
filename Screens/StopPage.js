@@ -9,10 +9,11 @@ import FeedbackPage from './FeedbackPage';
 import Context from '../user-context';
 
 import { WazeImage, CompletedImage } from '../styles/images';
-import { PhoneButton, WazeButton, BackButton, ClosePageButton, ButtonGroup, CheckInButton } from '../styles/buttons';
+import { PhoneButton, WazeButton, BackButton, HomeButton, CheckInButton } from '../styles/buttons';
 import { AddressInfoWrapper, RouteContainer } from '../styles/screens';
 import { MainText, BtnText, PageNumber, CustomerText, AddressText, DisplayText } from '../styles/text';
 import { fetchFunc } from '../Functions/fetchFuncs';
+import { NavButtons } from '../styles/misc';
 
 const LightSeaGreen = '#8DD4CF';
 const Orange = '#F9972Cff';
@@ -25,12 +26,12 @@ class StopPage extends React.Component {
     [`routeComplete${this.props.pageNumber}`]: false,
     showFeedbackPage: false
   }
+
   
   static contextType = Context;
 
   handleCheckIn = () => {
     //send check in timestamp and open feedback page
-    console.log('handlecheckin'); 
     this.setState({showFeedbackPage: true});
     fetchFunc(`https://allin1ship.herokuapp.com/sendStartTime/${this.context.data[this.props.pageNumber-1].schedule_stop_id}`, 'send start time')
   }
@@ -43,7 +44,6 @@ class StopPage extends React.Component {
 
   handleWazePress = () => {
     const wazeAddress = encodeURIComponent(this.context.data[this.props.pageNumber-1].address)
-    console.log(wazeAddress);
     Linking.openURL('https://waze.com/ul?q=' + wazeAddress) 
   };
   dialCall = () => {
@@ -54,12 +54,11 @@ class StopPage extends React.Component {
   render() {
     const { props, state, context } = this;
     const { data } = context;
-
-    console.log(context);
     const stopData = data[props.pageNumber-1]
     const stopTasks = context.stopTasks[props.pageNumber-1]
-    console.log('stopdata', stopData);
-
+    //wont allow setState routecomplte true in render bc of max depth... so instead this checks if stop already complete (on app load in middl eof route... so drivers dont repeat stops) and true (=> conditional complete comps renderinga as completed) if yes.
+    const completionStatus = data[props.pageNumber-1]['completion_status'] === 'complete' ? true : this.state[`routeComplete${props.pageNumber}`];
+    
     const tasksDisplay = stopTasks && stopTasks.map((task, index) => 
       <MainText key={index}>- {task.task}</MainText>
     )
@@ -83,17 +82,19 @@ class StopPage extends React.Component {
             />
         </Modal>
 
-        {state[`routeComplete${this.props.pageNumber}`] && <CompletedImage 
+        {completionStatus && <CompletedImage 
           source = {require('../assets/tick.png')} 
           style={{borderRadius: 36}}
         />}
+        <NavButtons>
+          <BackButton onPress={props.prevPage}><BtnText>back</BtnText></BackButton>
+          <Link /*style add*/ to="/home"  component={HomeButton}><WazeImage source={require('../assets/home-page.jpg')} /></Link> 
+          <BackButton onPress={() => props.nextPage(this.state[`routeComplete${props.pageNumber}`], completionStatus)}><BtnText>next</BtnText></BackButton> 
+        </NavButtons>
         
-        <Link /*style add*/ to="/home"  component={ClosePageButton}><BtnText>home</BtnText></Link> 
-        <BackButton onPress={props.prevPage}><BtnText>back</BtnText></BackButton>
-        <BackButton onPress={props.nextPage}><BtnText>next</BtnText></BackButton> 
         <PageNumber>{props.pageNumber}/{data.length} </PageNumber>        
 
-        <AddressInfoWrapper style={{backgroundColor: (state[`routeComplete${this.props.pageNumber}`] ? '#addeda' : '#F68813')}}>
+        <AddressInfoWrapper style={{backgroundColor: (completionStatus ? '#addeda' : '#F68813')}}>
           <CustomerText>{stopData['customer_name']}</CustomerText>
           <AddressText>{stopData.address}</AddressText>
           <MainText>{stopData.location}</MainText>
@@ -111,7 +112,7 @@ class StopPage extends React.Component {
         </PhoneButton>   
              
         <CheckInButton
-          style={{backgroundColor: (state[`routeComplete${this.props.pageNumber}`] ? Lavender : DarkBlue), height: 60}}  
+          style={{backgroundColor: (completionStatus ? Lavender : DarkBlue), height: 60}}  
           onPress={this.handleCheckIn}>
             <BtnText style={{fontWeight: 'bold'}}>CHECK IN</BtnText>
         </CheckInButton>

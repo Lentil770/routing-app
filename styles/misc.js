@@ -12,3 +12,8 @@ export const CenteredView = styled.View`
     justify-content: center;
     background-color: ${DarkBlue};
 `
+export const NavButtons = styled.View`
+    bottom: 30px;
+    display: flex;
+    flex-direction: row;
+`

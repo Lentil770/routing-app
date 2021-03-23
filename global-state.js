@@ -39,7 +39,7 @@ fetchAppData = async () => {
     if (!data) throw new Error
     this.setState({data, dataError: false})
     await this.fetchTasks(data.map(obj => obj.schedule_stop_id))
-    console.log('fetchappdata end, now setting loading false', data);
+    console.log('fetchappdata end, now setting loading false');
     this.setState({loading: false})
   } catch (e) {
       console.log('error occured in try fetch');

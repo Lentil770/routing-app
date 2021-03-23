@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { ToastAndroid } from 'react-native';
 
 import StopPage from './StopPage';
 import EndPage from "./EndPage";
@@ -13,13 +13,30 @@ class RouteContainer extends React.Component {
 
   static contextType = Context;
 
-  nextPage = () => {
+  componentDidMount() {
+    //in order to load correct page if in middle of route (so driver X repeat stops)
+    console.log('routeconntainer mounted');
+    let skipToPage = 1;
+    for (let i=0;i<this.context.data.length;i++) {
+      if (this.context.data[i]['completion_status'] === 'complete') {
+        skipToPage ++
+      }
+    }
+    this.setState({pageNumber: skipToPage})
+  }
+
+  //functions to swipe to nex / previous page by setting state pagenumber => rerendering new page
+  nextPage = (complete, dbComplete) => {
+    //check if stop complete and show message if not (in case swipe by mistake)
+    if (!complete && !dbComplete) {
+      console.log('incomplete', complete);
+      ToastAndroid.showWithGravity(` PREVIOUS STOP INCOMPLETE.${'\n'}Are you sure you want to continue?`, ToastAndroid.LONG, ToastAndroid.CENTER);
+    }
     this.setState({pageNumber: this.state.pageNumber + 1})
   }
   prevPage = () => {
     console.log('prevpage', this.state);
     if (this.state.pageNumber === 1) {
-      console.log('prevpage1');
       this.props.history.push('/home')
     }
     this.setState({pageNumber: this.state.pageNumber - 1})
@@ -27,8 +44,7 @@ class RouteContainer extends React.Component {
 
   render() {
       const contextData = this.context.data;
-      console.log('contextdatalength', contextData.length);
-      console.log('thisstate.pagenumner', this.state.pageNumber);
+      console.log('routecontainer reder: thisstate.pagenumner: ', this.state.pageNumber);
       if (this.state.pageNumber>contextData.length) { 
         return <EndPage prevPage={this.prevPage} />
       } else {

@@ -137,6 +137,13 @@ export const WazeButton = styled.TouchableHighlight`
     padding: 0;
     border-radius: 26px;
 `
+export const HomeButton = styled.TouchableHighlight`
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 26px;
+`
+
 export const ButtonGroup = styled.View`
     display: flex;
     flex-direction: row;
