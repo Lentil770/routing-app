@@ -43,8 +43,15 @@ class StopPage extends React.Component {
 
   handleWazePress = () => {
     //for waze btn, opens waze with stop address searched
-    const wazeAddress = encodeURIComponent(this.context.data[this.props.pageNumber-1].address)
-    Linking.openURL('https://waze.com/ul?q=' + wazeAddress) 
+    const customer = this.context.data[this.props.pageNumber-1];
+    
+    let wazeParams = 'q=' + encodeURIComponent(this.context.data[this.props.pageNumber-1].address)
+
+    console.log('handlewazepress', customer);
+    if (customer.latitude && customer.longitude) {
+      wazeParams = `navigate=yes&to=ll.${customer.latitude}%2C${customer.longitude}`
+    }
+    Linking.openURL('https://waze.com/ul?' + wazeParams) 
   };
   dialCall = () => {
     const phoneNumber = `tel:${this.context.data[this.props.pageNumber-1]['contact_number']}`;
