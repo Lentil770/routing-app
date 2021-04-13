@@ -2,7 +2,7 @@
   "expo": {
     "name": "routing-app",
     "slug": "routing-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/playstore-icon.png",
     "splash": {
