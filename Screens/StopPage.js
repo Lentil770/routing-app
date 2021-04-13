@@ -36,7 +36,7 @@ class StopPage extends React.Component {
   
   handleCompletion = () => {
     //this is passed as prop to Modal and when complete stop is clicked, this func is called and sets this page as complete etc.
-    this.props.nextPage();
+    this.props.nextPage(true, true);
     !this.state[`routeComplete${this.props.pageNumber}`] && fetchFunc(`https://allin1ship.herokuapp.com/sendTimestamp/${this.context.data[this.props.pageNumber-1].schedule_stop_id}`, 'complete stop timestamp');
     this.setState({[`routeComplete${this.props.pageNumber}`]: !this.state[`routeComplete${this.props.pageNumber}`]});
   }
@@ -44,15 +44,11 @@ class StopPage extends React.Component {
   handleWazePress = () => {
     //for waze btn, opens waze with stop address searched
     const customer = this.context.data[this.props.pageNumber-1];
-    
-    let wazeParams = 'q=' + encodeURIComponent(this.context.data[this.props.pageNumber-1].address)
-
-    console.log('handlewazepress', customer);
-    if (customer.latitude && customer.longitude) {
-      wazeParams = `navigate=yes&to=ll.${customer.latitude}%2C${customer.longitude}`
-    }
-    Linking.openURL('https://waze.com/ul?' + wazeParams) 
+      const wazeParams = () => (customer.latitude && customer.longitude) ? `navigate=yes&ll=${customer.latitude}%2C${customer.longitude}` : 'q=' + encodeURIComponent(this.context.data[this.props.pageNumber-1].address);
+    //console.log('https://waze.com/ul?' + wazeParams());
+    Linking.openURL('https://waze.com/ul?' + wazeParams()) 
   };
+  
   dialCall = () => {
     const phoneNumber = `tel:${this.context.data[this.props.pageNumber-1]['contact_number']}`;
     Linking.openURL(phoneNumber);
@@ -71,7 +67,7 @@ class StopPage extends React.Component {
     )
    
     return (
-      <RouteContainer style={{backgroundColor: (state[`routeComplete${this.props.pageNumber}`] ? LightSeaGreen : Orange)}}>
+      <RouteContainer style={{backgroundColor: (completionStatus ? LightSeaGreen : Orange)}}>
         <StatusBar style="auto" />
         <TopBar/>
 
@@ -115,10 +111,10 @@ class StopPage extends React.Component {
           <WazeImage source={require('../assets/waze-logo.webp')}/>
         </WazeButton>
 
-        <PhoneButton onPress={this.dialCall} >
+        {stopData['contact_number'] ? <PhoneButton onPress={this.dialCall} >
             <BtnText>Call {stopData['contact_name']} ({stopData['contact_number']})</BtnText>
-        </PhoneButton>   
-             
+        </PhoneButton> : <></>}
+
         <CheckInButton
           style={{backgroundColor: (completionStatus ? Lavender : DarkBlue), height: 60}}  
           onPress={this.handleCheckIn}>

@@ -24,7 +24,7 @@ fetchTasks = async (stop_ids) => {
     try {
     const response = await fetch(`https://allin1ship.herokuapp.com/getDailyTasks/${stop_ids[i]}`)
     const data = await  response.json()
-    console.log('fetched stop tasks');
+    //console.log('fetched stop tasks');
     this.setState({stopTasks: [...this.state.stopTasks, data], loading: false })
     } catch (e) {
         console.log('error in fetchtasks')
@@ -39,8 +39,8 @@ fetchAppData = async () => {
     if (!data) throw new Error
     this.setState({data, dataError: false})
     await this.fetchTasks(data.map(obj => obj.schedule_stop_id))
-    console.log('fetchappdata end, now setting loading false');
     this.setState({loading: false})
+    console.log('fetch app route data complete');
   } catch (e) {
       console.log('error occured in try fetch');
       this.setState({dataError: true, loading: false})

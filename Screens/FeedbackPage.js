@@ -63,6 +63,7 @@ export default class FeedbackPage extends React.Component {
 
     tasksSubmit = () => {
         const { stopTasks } = this.props;
+        if (!stopTasks) return;
         for (let i=0;i<stopTasks.length;i++) {
             if (this.state[`task${stopTasks[i].task_id}`]) {
             fetchFunc(`https://allin1ship.herokuapp.com/markTaskComplete/${stopTasks[i].task_id}`, 'mark task complete')
