@@ -23,7 +23,7 @@ fetchTasks = async (stop_ids) => {
     
     try {
     const response = await fetch(`https://allin1ship.herokuapp.com/getDailyTasks/${stop_ids[i]}`)
-    const data = await  response.json()
+    const data = await response.json()
     //console.log('fetched stop tasks');
     this.setState({stopTasks: [...this.state.stopTasks, data], loading: false })
     } catch (e) {
@@ -34,9 +34,11 @@ fetchTasks = async (stop_ids) => {
 //fetching drivers route data from server and setting it to state.
 fetchAppData = async () => {
   try {
+    console.log(`https://allin1ship.herokuapp.com/getDailySchedule/${this.state.username}`);
     const response = await fetch(`https://allin1ship.herokuapp.com/getDailySchedule/${this.state.username}`)
     const data = await response.json()
     if (!data) throw new Error
+    console.log(data);
     this.setState({data, dataError: false})
     await this.fetchTasks(data.map(obj => obj.schedule_stop_id))
     this.setState({loading: false})

@@ -151,11 +151,11 @@ export default class FeedbackPage extends React.Component {
             
             <MainText style={{position: 'absolute', top: 30}}>{stopData.customer_name}</MainText>
      
-            <TaskCompletionContainer>
+            {stopTasks.length>0 && <TaskCompletionContainer>
               <LineText>TASKS</LineText>
               <MainText>MARK TASKS COMPLETE</MainText>
-              {stopTasks && tasksDisplay}
-            </TaskCompletionContainer>
+               {tasksDisplay}
+            </TaskCompletionContainer>}
 
             <View>
                 <LineText>SEND FEEDBACK</LineText>
