@@ -23,7 +23,7 @@ class HomePage extends React.Component {
 
 
     handleStartPress = () => {
-        fetch(`https://allin1ship.herokuapp.com/sendStartTime/${this.context.username}`)
+        fetch(`https://allin1ship.herokuapp.com/sendScheduleStartTime/${this.context.username}`)
         this.context.data && this.props.history.push('/route-container')
     }
 
