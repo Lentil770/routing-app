@@ -84,7 +84,7 @@ export default class FeedbackPage extends React.Component {
       if (flag == 1) {
         this.setState({selected: true});
       }
-      this.setState({SelectedButton: button, numberPackages, feedbackPackagesSelected: this.state.feedbackSelected && true})
+      this.setState({SelectedButton: button, numberPackages, feedbackPackagesSelected: true})
     }
 
     handleTaskCheck = (stateReference) => {
@@ -175,7 +175,7 @@ export default class FeedbackPage extends React.Component {
                 {renderPackageButtons}           
             </PackageButtonsView>
             
-            {this.state.feedbackPackagesSelected && <SubmitButton
+            {(this.state.feedbackSelected && this.state.feedbackPackagesSelected) && <SubmitButton
                 style={{backgroundColor: DarkBlue, position: 'absolute', bottom: 1}}  
                 onPress={this.handleSubmit}>
                   <BtnText style={{fontWeight: 'bold'}}>COMPLETE</BtnText>
